@@ -6,6 +6,12 @@ __pycache__/
 # C extensions
 *.so
 
+# IDE Files
+.idea
+
+# Mock Files
+dry_run.py
+
 # Distribution / packaging
 .Python
 build/
