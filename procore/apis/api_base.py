@@ -26,19 +26,6 @@ class ApiBase:
         """
         self.__server_url = server_url
 
-    def get_all(self):
-        """
-        Get all the Objects based on paginated call
-        """
-
-        count = self.count()['count']
-        objects = []
-        page_size = 200
-        for i in range(0, count, page_size):
-            segment = self.get(offset=i, limit=page_size)
-            objects = objects + segment['data']
-        return objects
-
     def _get_request(self, params, api_url):
         """Create a HTTP GET request.
 
@@ -138,48 +125,5 @@ class ApiBase:
             else:
                 raise ProcoreError('Error: {0}'.format(response.status_code), response.text)
 
-        else:
-            raise ProcoreError('Please provide jobs url to make a job request')
-
-    def delete_job_request(self, job_id):
-        """
-        delete request
-        :param job_id:
-        :return:
-        """
-
-        api_headers = {
-            'Authorization': 'Bearer {0}'.format(self.__access_token)
-        }
-        if self.__server_url is not None:
-            response = requests.delete(
-                '{0}{1}'.format(self.__server_url, job_id),
-                headers=api_headers,
-            )
-
-            if response.status_code == 200:
-                result = json.loads(response.text)
-                return result
-
-            elif response.status_code == 400:
-                raise WrongParamsError('Some of the parameters are wrong', response.text)
-
-            elif response.status_code == 401:
-                raise InvalidTokenError('Invalid token, try to refresh it', response.text)
-
-            elif response.status_code == 403:
-                raise NoPrivilegeError('Forbidden, the user has insufficient privilege', response.text)
-
-            elif response.status_code == 404:
-                raise NotFoundItemError('Not found item with ID', response.text)
-
-            elif response.status_code == 498:
-                raise ExpiredTokenError('Expired token, try to refresh it', response.text)
-
-            elif response.status_code == 500:
-                raise InternalServerError('Internal server error', response.text)
-
-            else:
-                raise ProcoreError('Error: {0}'.format(response.status_code), response.text)
         else:
             raise ProcoreError('Please provide jobs url to make a job request')
