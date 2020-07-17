@@ -6,10 +6,11 @@ class Projects(ApiBase):
 
     GET_PROJECTS = '/projects'
 
-    def get(self, company_id):
+    def get(self, company_id: str):
         """
-        Get all projects
-        :return: returns all projects
+        Get Projects from Procore
+        :param company_id: The unique company id
+        :return: projects
         """
         return self._get_request({
             'company_id': company_id
